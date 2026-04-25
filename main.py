@@ -1,6 +1,7 @@
 import pickle
 import numpy as np
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 # ── Carrega artefato ──────────────────────────────────────────────────────────
@@ -13,6 +14,13 @@ FEATURES = artifact["features"]
 
 # ── App ───────────────────────────────────────────────────────────────────────
 app = FastAPI(title="Churn Predictor API", version="1.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class ClienteInput(BaseModel):
     tenure_months:      int   = Field(..., ge=1,  le=120,  example=8)
